@@ -1,0 +1,10 @@
+{
+  "name": "backend-node-vercel",
+  "version": "1.0.0",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "mongodb": "^5.9.2"
+  }
+}
