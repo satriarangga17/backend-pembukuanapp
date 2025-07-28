@@ -22,10 +22,10 @@ module.exports = async function handler(req, res) {
     const db = client.db('pembukuansekolah');
     const siswaCol = db.collection('siswa');
     const body = req.body || req.query;
-    const { nama, bulanTahun, minggu, status } = body;
-    if (!nama || !bulanTahun || minggu === undefined || status === undefined) {
-      console.log('PARAMS ERROR:', { nama, bulanTahun, minggu, status });
-      return res.status(400).json({ error: 'Parameter wajib diisi', params: { nama, bulanTahun, minggu, status } });
+    const { nama, bulanTahun, minggu, nominal } = body;
+    if (!nama || !bulanTahun || minggu === undefined || nominal === undefined) {
+      console.log('PARAMS ERROR:', { nama, bulanTahun, minggu, nominal });
+      return res.status(400).json({ error: 'Parameter wajib diisi', params: { nama, bulanTahun, minggu, nominal } });
     }
     // Pastikan field pembayaran.bulanTahun ada, jika tidak, tambahkan
     const siswa = await siswaCol.findOne({ nama: { $regex: `^${nama}$`, $options: 'i' } });
@@ -36,10 +36,10 @@ module.exports = async function handler(req, res) {
     if (!siswa.pembayaran || !siswa.pembayaran[bulanTahun]) {
       // Tambahkan array pembayaran baru untuk bulanTahun
       const pembayaranBaru = siswa.pembayaran || {};
-      pembayaranBaru[bulanTahun] = [false, false, false, false];
+      pembayaranBaru[bulanTahun] = [0, 0, 0, 0, 0];
       await siswaCol.updateOne(
         { nama: { $regex: `^${nama}$`, $options: 'i' } },
-        { $set: { [`pembayaran.${bulanTahun}`]: [false, false, false, false] } }
+        { $set: { [`pembayaran.${bulanTahun}`]: [0, 0, 0, 0, 0] } }
       );
       console.log('ADD NEW BULAN:', nama, bulanTahun);
     }
@@ -47,13 +47,13 @@ module.exports = async function handler(req, res) {
     const key = `pembayaran.${bulanTahun}.${minggu}`;
     const result = await siswaCol.updateOne(
       { nama: { $regex: `^${nama}$`, $options: 'i' } },
-      { $set: { [key]: status } }
+      { $set: { [key]: nominal } }
     );
     if (result.modifiedCount > 0) {
-      console.log('UPDATE SUCCESS:', nama, bulanTahun, minggu, status);
+      console.log('UPDATE SUCCESS:', nama, bulanTahun, minggu, nominal);
       res.status(200).json({ message: 'Pembayaran diupdate' });
     } else {
-      console.log('UPDATE FAILED:', nama, bulanTahun, minggu, status);
+      console.log('UPDATE FAILED:', nama, bulanTahun, minggu, nominal);
       res.status(404).json({ error: 'Siswa tidak ditemukan atau tidak berubah' });
     }
   } catch (e) {

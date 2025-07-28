@@ -24,7 +24,7 @@ module.exports = async function handler(req, res) {
     } else if (req.method === 'POST') {
       const { nama, pembayaran } = req.body || req.query;
       if (!nama) return res.status(400).json({ error: 'Nama wajib diisi' });
-      await siswaCol.insertOne({ nama, pembayaran: pembayaran || [false, false, false, false] });
+      await siswaCol.insertOne({ nama, pembayaran: pembayaran || [0, 0, 0, 0, 0] });
       res.status(200).json({ message: 'Siswa ditambahkan' });
     } else {
       res.status(405).json({ error: 'Method not allowed' });
