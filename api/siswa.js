@@ -2,6 +2,7 @@ require('dotenv').config();
 const { MongoClient } = require('mongodb');
 
 const uri = process.env.MONGO_URI;
+const dbName = process.env.DB_NAME || 'pembukuansekolah';
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -12,7 +13,7 @@ module.exports = async function handler(req, res) {
   const client = new MongoClient(uri);
   try {
     await client.connect();
-    const db = client.db('pembukuansekolah'); // gunakan database yang benar, huruf kecil semua
+    const db = client.db(dbName);
     console.log('Database:', db.databaseName);
     const siswaCol = db.collection('siswa');
     const siswa = await siswaCol.find().toArray();

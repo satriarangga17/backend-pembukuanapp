@@ -2,6 +2,7 @@ require('dotenv').config();
 const { MongoClient } = require('mongodb');
 
 const uri = process.env.MONGO_URI;
+const dbName = process.env.DB_NAME || 'pembukuansekolah';
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -14,7 +15,7 @@ module.exports = async function handler(req, res) {
   const client = new MongoClient(uri);
   try {
     await client.connect();
-    const db = client.db('pembukuansekolah');
+    const db = client.db(dbName);
     const siswaCol = db.collection('siswa');
     const nama = req.query.nama || (req.body && req.body.nama);
     if (!nama) return res.status(400).json({ error: 'Parameter nama wajib diisi' });

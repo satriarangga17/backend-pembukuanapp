@@ -2,6 +2,7 @@ require('dotenv').config();
 const { MongoClient } = require('mongodb');
 
 const uri = process.env.MONGO_URI;
+const dbName = process.env.DB_NAME || 'pembukuansekolah';
 
 module.exports = async function handler(req, res) {
   console.log('REQUEST:', req.method, req.body || req.query); // log awal
@@ -19,7 +20,7 @@ module.exports = async function handler(req, res) {
   const client = new MongoClient(uri);
   try {
     await client.connect();
-    const db = client.db('pembukuansekolah');
+    const db = client.db(dbName);
     const siswaCol = db.collection('siswa');
     const body = req.body || req.query;
     const { nama, bulanTahun, minggu, nominal } = body;
