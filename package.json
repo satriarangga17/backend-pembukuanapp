@@ -1,10 +1,22 @@
 {
-  "name": "backend-node-vercel",
+  "name": "pembukuan-backend",
   "version": "1.0.0",
+  "description": "Backend API untuk aplikasi pembukuan sekolah",
+  "main": "start_server.js",
+  "scripts": {
+    "start": "node start_server.js",
+    "dev": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
+    "axios": "^1.11.0",
     "body-parser": "^2.2.0",
-    "dotenv": "^17.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "express": "^5.1.0",
     "mongodb": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
